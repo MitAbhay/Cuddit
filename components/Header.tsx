@@ -59,10 +59,10 @@ function Header() {
       {session ? (
         <div
           // onClick={() => signOut()}
-          className="hidden cursor-pointer items-center rounded-lg border border-gray-500 p-1 lg:flex "
+          className="hidden cursor-pointer items-center rounded-lg border border-gray-500 p-1 lg:flex space-x-1"
         >
           <div className="flex-1 text-xs text-gray-500">
-            <p className="truncate">{session?.user?.name}</p>
+            <p className="font-bold">{session?.user?.name}</p>
             <p>1 cud</p>
           </div>
           <ChevronDownIcon className="h-5 w-5 flex-shrink-0 text-gray-500" />
