@@ -1,6 +1,22 @@
 import Image from 'next/image'
 import React from 'react'
-import { HomeIcon, ChevronDownIcon, SearchIcon } from '@heroicons/react/solid'
+import {
+  HomeIcon,
+  ChevronDownIcon,
+  SearchIcon,
+  BeakerIcon,
+  MenuIcon,
+} from '@heroicons/react/solid'
+import {
+  StarIcon,
+  SparklesIcon,
+  ChatIcon,
+  VideoCameraIcon,
+  GlobeIcon,
+  PlusIcon,
+  BellIcon,
+  SpeakerphoneIcon,
+} from '@heroicons/react/outline'
 
 function Header() {
   return (
@@ -25,6 +41,23 @@ function Header() {
         />
         <button hidden type="submit" />
       </form>
+      {/* Icons */}
+      <div className="hidden items-center px-4 text-gray-500 lg:inline-flex">
+        <SparklesIcon className="icon" />
+        <ChatIcon className="icon" />
+        <GlobeIcon className="icon" />
+        <VideoCameraIcon className="icon" />
+        <BellIcon className="icon" />
+        <PlusIcon className="icon" />
+        <SpeakerphoneIcon className="icon" />
+      </div>
+      <div className="ml-5 flex items-center lg:hidden">
+        <MenuIcon className="icon" />
+      </div>
+      {/* signIn/SignOut */}
+      <div className="hidden cursor-pointer items-center rounded-lg border border-gray-500 p-2 lg:flex">
+        <p className="text-gray-500">Sign In</p>
+      </div>
     </div>
   )
 }
