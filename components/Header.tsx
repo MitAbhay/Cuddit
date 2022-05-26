@@ -8,7 +8,6 @@ import {
   MenuIcon,
 } from '@heroicons/react/solid'
 import {
-  StarIcon,
   SparklesIcon,
   ChatIcon,
   VideoCameraIcon,
@@ -17,8 +16,10 @@ import {
   BellIcon,
   SpeakerphoneIcon,
 } from '@heroicons/react/outline'
+import { signIn, signOut, useSession } from 'next-auth/react'
 
 function Header() {
+  const { data: session } = useSession()
   return (
     <div className="sticky top-0 z-50 flex bg-white px-4 py-2 shadow-lg">
       {/* Logo */}
@@ -55,9 +56,25 @@ function Header() {
         <MenuIcon className="icon" />
       </div>
       {/* signIn/SignOut */}
-      <div className="hidden cursor-pointer items-center rounded-lg border border-gray-500 p-2 lg:flex">
-        <p className="text-gray-500">Sign In</p>
-      </div>
+      {session ? (
+        <div
+          // onClick={() => signOut()}
+          className="hidden cursor-pointer items-center rounded-lg border border-gray-500 p-1 lg:flex "
+        >
+          <div className="flex-1 text-xs text-gray-500">
+            <p className="truncate">{session?.user?.name}</p>
+            <p>1 cud</p>
+          </div>
+          <ChevronDownIcon className="h-5 w-5 flex-shrink-0 text-gray-500" />
+        </div>
+      ) : (
+        <div
+          onClick={() => signIn()}
+          className="hidden cursor-pointer items-center rounded-lg border border-gray-500 p-2 hover:bg-gray-300 lg:flex "
+        >
+          <p className="text-gray-500">Sign In</p>
+        </div>
+      )}
     </div>
   )
 }
