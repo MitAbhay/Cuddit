@@ -1,5 +1,7 @@
 /** @type {import('next').NextConfig} */
 module.exports = {
   reactStrictMode: true,
-  images: {}
+  images: {
+    domains: ['https://avatars.dicebear.com/'],
+  },
 }
