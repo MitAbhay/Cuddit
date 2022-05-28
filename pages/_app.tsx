@@ -9,7 +9,7 @@ function MyApp({ Component, pageProps: { session, ...pageProps } }: AppProps) {
   return (
     <ApolloProvider client={client}>
       <SessionProvider session={session}>
-        <div className="h-sreen overflow-y-scroll bg-slate-200">
+        <div className="h-sreen overflow-y-scroll bg-slate-100">
           <Header />
           <Component {...pageProps} />
         </div>
