@@ -80,6 +80,14 @@ type Query {
       table: "post"
       configuration: "postgresql_config"
     )
+  getSubcudditListByTopic(topic: String!): [Subcuddit]
+    @dbquery(
+      type: "postgresql"
+      query: """
+      select * from "subcuddit" where "topic" = $1
+      """
+      configuration: "postgresql_config"
+    )
   getSubcudditList: [Subcuddit]
     @dbquery(
       type: "postgresql"
@@ -100,9 +108,15 @@ type Mutation {
   """
   In this mutation example you can see how to do a mutation to insert data in the database.
   """
+  insertSubCuddit(topic: String!): Subcuddit
+    @dbquery(
+      type: "postgresql"
+      table: "subcuddit"
+      dml: INSERT
+      configuration: "postgresql_config"
+    )
   insertPost(
     image: String!
-    created_at: DateTime!
     body: String!
     subcuddit_id: ID!
     title: String!
