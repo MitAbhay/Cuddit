@@ -4,6 +4,10 @@ import { useSession } from 'next-auth/react'
 import React, { useState } from 'react'
 import Avatar from './Avatar'
 import { useForm, SubmitHandler } from 'react-hook-form'
+import { useMutation } from '@apollo/client'
+import { ADD_POST, ADD_SUBCUDDIT } from '../graphql/mutation'
+import client from '../apollo-client'
+import { GET_SUBCUDDIT_BY_TOPIC } from '../graphql/queries'
 
 type Inputs = {
   postTitle: string
@@ -13,15 +17,77 @@ type Inputs = {
 }
 
 export default function Postbox() {
+  const { addPost } = useMutation(ADD_POST)
+  const { addSubCuddit } = useMutation(ADD_SUBCUDDIT)
   const [ImageBox, setImageBox] = useState<boolean>(false)
   const { data: session } = useSession()
   const {
+    setValue,
     register,
     handleSubmit,
     watch,
     formState: { errors },
   } = useForm<Inputs>()
-  const onSubmit: SubmitHandler<Inputs> = (data) => console.log(data)
+  const onSubmit: SubmitHandler<Inputs> = async (formdata) => {
+    // console.log(formdata)
+    try {
+      const {
+        data: { getSubcudditListByTopic },
+      } = await client.query({
+        query: GET_SUBCUDDIT_BY_TOPIC,
+        variables: {
+          topic: formdata.postSubCuddit,
+        },
+      })
+
+      const subCudditExists = getSubcudditListByTopic.length > 0
+
+      if (!subCudditExists) {
+        // console.log("SubCuddit is new ! Creating new SubCuddit...")
+        const {
+          data: { insertSubcuddit: newSubCuddit },
+        } = await addSubCuddit({
+          variables: {
+            topic: formdata.postSubCuddit,
+          },
+        })
+        const image = formdata.postImage || ''
+
+        const {
+          data: { insertPost: newPost },
+        } = await addPost({
+          variables: {
+            title: formdata.postTitle,
+            body: formdata.postBody,
+            image: image,
+            subcuddit_id: newSubCuddit.id,
+            username: session?.user?.name,
+          },
+        })
+      } else {
+        const image = formdata.postImage || ''
+
+        const {
+          data: { insertPost: newPost },
+        } = await addPost({
+          variables: {
+            title: formdata.postTitle,
+            body: formdata.postBody,
+            image: image,
+            subcuddit_id: getSubcudditListByTopic[0].id,
+            usernae: session?.user?.name,
+          },
+        })
+      }
+
+    setValue('postTitle', '')
+    setValue('postBody', '')
+    setValue('postImage', '')
+    setValue('postSubCuddit', '')
+    
+
+    } catch (error) {}
+  }
   return (
     <form
       onSubmit={handleSubmit(onSubmit)}
@@ -84,7 +150,7 @@ export default function Postbox() {
           )}
           {/* Errors */}
           {Object.keys(errors).length > 0 && (
-            <div className="p-4 space-y-2 text-red-500">
+            <div className="space-y-2 p-4 text-red-500">
               {errors.postTitle?.type === 'required' && (
                 <p>*Title is required</p>
               )}
