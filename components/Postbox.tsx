@@ -8,6 +8,7 @@ import { useMutation } from '@apollo/client'
 import { ADD_POST, ADD_SUBCUDDIT } from '../graphql/mutation'
 import client from '../apollo-client'
 import { GET_SUBCUDDIT_BY_TOPIC } from '../graphql/queries'
+import toast from 'react-hot-toast'
 
 type Inputs = {
   postTitle: string
@@ -17,8 +18,8 @@ type Inputs = {
 }
 
 export default function Postbox() {
-  const { addPost } = useMutation(ADD_POST)
-  const { addSubCuddit } = useMutation(ADD_SUBCUDDIT)
+  const [addPost] = useMutation(ADD_POST)
+  const [addSubCuddit] = useMutation(ADD_SUBCUDDIT)
   const [ImageBox, setImageBox] = useState<boolean>(false)
   const { data: session } = useSession()
   const {
@@ -29,9 +30,10 @@ export default function Postbox() {
     formState: { errors },
   } = useForm<Inputs>()
   const onSubmit: SubmitHandler<Inputs> = async (formdata) => {
-    // console.log(formdata)
+    console.log(formdata)
+    const notification = toast.loading('Creating post...')
     try {
-      const {
+      const {   
         data: { getSubcudditListByTopic },
       } = await client.query({
         query: GET_SUBCUDDIT_BY_TOPIC,
@@ -41,29 +43,36 @@ export default function Postbox() {
       })
 
       const subCudditExists = getSubcudditListByTopic.length > 0
-
+      console.log(getSubcudditListByTopic)
+      console.log(subCudditExists)
       if (!subCudditExists) {
         // console.log("SubCuddit is new ! Creating new SubCuddit...")
+
         const {
-          data: { insertSubcuddit: newSubCuddit },
+          data: { insertSubCuddit: newSubCuddit },
         } = await addSubCuddit({
           variables: {
             topic: formdata.postSubCuddit,
           },
         })
-        const image = formdata.postImage || ''
+        console.log(newSubCuddit)
 
+        const image = formdata.postImage || '';
+
+        console.log("he")
         const {
           data: { insertPost: newPost },
         } = await addPost({
           variables: {
-            title: formdata.postTitle,
             body: formdata.postBody,
-            image: image,
+            Image: image,
             subcuddit_id: newSubCuddit.id,
+            title: formdata.postTitle,
             username: session?.user?.name,
           },
         })
+
+        console.log(newPost)
       } else {
         const image = formdata.postImage || ''
 
@@ -71,22 +80,28 @@ export default function Postbox() {
           data: { insertPost: newPost },
         } = await addPost({
           variables: {
-            title: formdata.postTitle,
             body: formdata.postBody,
-            image: image,
+            Image: image,
             subcuddit_id: getSubcudditListByTopic[0].id,
-            usernae: session?.user?.name,
+            title: formdata.postTitle,
+            username: session?.user?.name,
           },
         })
       }
 
-    setValue('postTitle', '')
-    setValue('postBody', '')
-    setValue('postImage', '')
-    setValue('postSubCuddit', '')
-    
+      setValue('postTitle', '')
+      setValue('postBody', '')
+      setValue('postImage', '')
+      setValue('postSubCuddit', '')
 
-    } catch (error) {}
+      toast.success('Post created!', {
+        id: notification,
+      })
+    } catch (error) {
+      toast.error('Oops !!! Something went Wrong', {
+        id: notification,
+      })
+    }
   }
   return (
     <form

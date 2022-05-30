@@ -27,7 +27,7 @@ export const ADD_POST = gql`
 
 export const ADD_SUBCUDDIT = gql`
   mutation MyMutation($topic: String!) {
-    insertSubcuddit(topic: $topic) {
+    insertSubCuddit(topic: $topic) {
       id
       topic
       created_at
