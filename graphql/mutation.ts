@@ -3,22 +3,22 @@ import { gql } from '@apollo/client'
 export const ADD_POST = gql`
   mutation addPost(
     $body: String!
-    $Image: String!
+    $image: String!
     $subcuddit_id: ID!
     $title: String!
     $username: String!
   ) {
     insertPost(
       body: $body
-      Image: $Image
-      subCuddit: $subcuddit_id
+      image: $image
+      subcuddit_id: $subcuddit_id
       title: $title
       username: $username
     ) {
       id
       body
-      Image
-      subCuddit
+      image
+      subcuddit_id
       title
       username
     }

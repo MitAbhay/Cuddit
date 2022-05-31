@@ -18,7 +18,7 @@ type Inputs = {
 }
 
 export default function Postbox() {
-  const [addPost] = useMutation(ADD_POST)
+  const [addPost, { data, loading, error }] = useMutation(ADD_POST)
   const [addSubCuddit] = useMutation(ADD_SUBCUDDIT)
   const [ImageBox, setImageBox] = useState<boolean>(false)
   const { data: session } = useSession()
@@ -30,12 +30,13 @@ export default function Postbox() {
     formState: { errors },
   } = useForm<Inputs>()
   const onSubmit: SubmitHandler<Inputs> = async (formdata) => {
-    console.log(formdata)
+    // console.log(formdata)
     const notification = toast.loading('Creating post...')
     try {
-      const {   
+      const {
         data: { getSubcudditListByTopic },
       } = await client.query({
+        fetchPolicy: 'no-cache',
         query: GET_SUBCUDDIT_BY_TOPIC,
         variables: {
           topic: formdata.postSubCuddit,
@@ -43,8 +44,8 @@ export default function Postbox() {
       })
 
       const subCudditExists = getSubcudditListByTopic.length > 0
-      console.log(getSubcudditListByTopic)
-      console.log(subCudditExists)
+      // console.log(getSubcudditListByTopic)
+      // console.log(subCudditExists)
       if (!subCudditExists) {
         // console.log("SubCuddit is new ! Creating new SubCuddit...")
 
@@ -55,38 +56,40 @@ export default function Postbox() {
             topic: formdata.postSubCuddit,
           },
         })
-        console.log(newSubCuddit)
+        // console.log(newSubCuddit)
 
-        const image = formdata.postImage || '';
-
-        console.log("he")
+        const image = formdata.postImage || ''
         const {
           data: { insertPost: newPost },
         } = await addPost({
           variables: {
             body: formdata.postBody,
-            Image: image,
+            image: image,
             subcuddit_id: newSubCuddit.id,
             title: formdata.postTitle,
             username: session?.user?.name,
           },
         })
 
-        console.log(newPost)
+        // console.log(newPost)
       } else {
         const image = formdata.postImage || ''
-
+        if (error) {
+          console.log(error.message)
+        }
         const {
           data: { insertPost: newPost },
         } = await addPost({
           variables: {
             body: formdata.postBody,
-            Image: image,
+            image: image,
             subcuddit_id: getSubcudditListByTopic[0].id,
             title: formdata.postTitle,
             username: session?.user?.name,
           },
         })
+
+        // console.log(newPost)
       }
 
       setValue('postTitle', '')
