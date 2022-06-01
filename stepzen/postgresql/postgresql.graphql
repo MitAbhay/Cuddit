@@ -14,6 +14,21 @@ type Post {
   subcuddit_id: ID
   title: String
   username: String
+  comments: [Comment]
+    @materializer(
+      query: "getCommentsByPostId"
+      arguments: [{ name: "post_id", field: "id" }]
+    )
+  votes: [Vote]
+    @materializer(
+      query: "getVotesByPostId"
+      arguments: [{ name: "post_id", field: "id" }]
+    )
+  subcuddit: [Subcuddit]
+    @materializer(
+      query: "getSubcudditListById"
+      arguments: [{ name: "id", field: "subcuddit_id" }]
+    )
 }
 
 type Subcuddit {
@@ -36,6 +51,40 @@ type Query {
       type: "postgresql"
       schema: "public"
       table: "comment"
+      configuration: "postgresql_config"
+    )
+  """
+  This query for getting comment by post_id
+  """
+  getCommentsByPostId(post_id: ID!): [Comment]
+    @dbquery(
+      type: "postgresql"
+      query: """
+      select * from "comment" where "post_id" = $1
+      """
+      configuration: "postgresql_config"
+    )
+  """
+  This query for getting vote by post_id
+  """
+  getVotesByPostId(post_id: ID!): [Vote]
+    @dbquery(
+      type: "postgresql"
+      query: """
+      select * from "vote" where "post_id" = $1
+      order by "created_at" desc
+      """
+      configuration: "postgresql_config"
+    )
+  """
+  This query for getting subcuddit by subcuddit_id
+  """
+  getSubcudditListById(id: ID!): [Subcuddit]
+    @dbquery(
+      type: "postgresql"
+      query: """
+      select * from "subcuddit" where "id" = $1
+      """
       configuration: "postgresql_config"
     )
   """

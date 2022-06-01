@@ -1,5 +1,6 @@
 import type { NextPage } from 'next'
 import Head from 'next/head'
+import Feed from '../components/Feed'
 import Postbox from '../components/Postbox'
 
 const Home: NextPage = () => {
@@ -9,6 +10,7 @@ const Home: NextPage = () => {
         <title>Reddit</title>
       </Head>
       <Postbox />
+      <Feed/>
     </div>
   )
 }
