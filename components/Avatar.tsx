@@ -3,8 +3,8 @@ import Image from 'next/image'
 import React from 'react'
 
 type Props = {
-  seed?: string
-  large?: boolean
+  seed?: String
+  large?: Boolean
 }
 export default function Avatar({ seed, large }: Props) {
   const { data: session } = useSession()

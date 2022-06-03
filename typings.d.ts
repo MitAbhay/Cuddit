@@ -1,34 +1,34 @@
 type Comments = {
-  created_at: String
+  created_at: string
   id: number
   post_id: number
-  text: String
-  username: String
+  text: string
+  username: string
 }
 
 type Vote = {
-  created_at: String
+  created_at: string
   id: number
   post_id: number
   upvote: boolean
-  username: String
+  username: string
 }
 
 type Subcuddit = {
-  created_at: String
+  created_at: string
   id: number
-  topic: String
+  topic: string
 }
 
 type Post = {
-  body: String
-  created_at: String
+  body: string
+  created_at: string
   id: number
-  image: String
+  image: string
   subcuddit_id: number
-  title: String
-  username: String
+  title: string
+  username: string
   votes: [Vote]
-  comments: [Comment]
+  comments: [Comments]
   subcuddit: [Subcuddit]
 }

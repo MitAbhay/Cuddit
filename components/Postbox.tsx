@@ -7,7 +7,7 @@ import { useForm, SubmitHandler } from 'react-hook-form'
 import { useMutation } from '@apollo/client'
 import { ADD_POST, ADD_SUBCUDDIT } from '../graphql/mutation'
 import client from '../apollo-client'
-import { GET_SUBCUDDIT_BY_TOPIC } from '../graphql/queries'
+import { GET_ALL_POSTS, GET_SUBCUDDIT_BY_TOPIC } from '../graphql/queries'
 import toast from 'react-hot-toast'
 
 type Inputs = {
@@ -18,7 +18,9 @@ type Inputs = {
 }
 
 export default function Postbox() {
-  const [addPost, { data, loading, error }] = useMutation(ADD_POST)
+  const [addPost, { error }] = useMutation(ADD_POST, {
+    refetchQueries: [GET_ALL_POSTS, 'getPostList'],
+  })
   const [addSubCuddit] = useMutation(ADD_SUBCUDDIT)
   const [ImageBox, setImageBox] = useState<boolean>(false)
   const { data: session } = useSession()
