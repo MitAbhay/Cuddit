@@ -30,8 +30,7 @@ export default function Post(post: Props) {
           <p className="items-center text-xs text-gray-400">
             {/* {console.log(post.post)} */}
             <span className="font-bold hover:text-blue-500">
-              {' '}
-              r/{post.post.subcuddit[0]?.topic}{' '}
+              r/{post.post.subcuddit[0]?.topic}
             </span>
             • Posted by u/
             {post.post.username}
