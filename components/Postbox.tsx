@@ -16,8 +16,10 @@ type Inputs = {
   postImage: string
   postSubCuddit: string
 }
-
-export default function Postbox() {
+type Props = {
+  subcuddit?: string
+}
+export default function Postbox({ subcuddit }: Props) {
   const [addPost, { error }] = useMutation(ADD_POST, {
     refetchQueries: [GET_ALL_POSTS, 'getPostList'],
   })
@@ -41,7 +43,7 @@ export default function Postbox() {
         fetchPolicy: 'no-cache',
         query: GET_SUBCUDDIT_BY_TOPIC,
         variables: {
-          topic: formdata.postSubCuddit,
+          topic: subcuddit || formdata.postSubCuddit,
         },
       })
 
@@ -122,7 +124,9 @@ export default function Postbox() {
           type="text"
           placeholder={
             session
-              ? 'Type your TITLE here for the Post'
+              ? subcuddit
+                ? `Create your Post with Subcuddit r/${subcuddit}`
+                : 'Type your TITLE here for the Post'
               : 'Sign in to Reddit to Post'
           }
         />
@@ -147,15 +151,18 @@ export default function Postbox() {
             />
           </div>
           {/* SUBCUDDIT */}
-          <div className="flex items-center space-x-6 p-2">
-            <p className="min-w-[90px] font-bold">SUBCUDDIT:</p>
-            <input
-              {...register('postSubCuddit', { required: true })}
-              className="flex-1 bg-gray-50 outline-none"
-              placeholder="Example: nextjs"
-              type="text"
-            />
-          </div>
+          {!subcuddit && (
+            <div className="flex items-center space-x-6 p-2">
+              <p className="min-w-[90px] font-bold">SUBCUDDIT:</p>
+              <input
+                {...register('postSubCuddit', { required: true })}
+                className="flex-1 bg-gray-50 outline-none"
+                placeholder="Example: nextjs"
+                type="text"
+              />
+            </div>
+          )}
+
           {/* IMAGE */}
           {ImageBox && (
             <div className="flex items-center space-x-6 p-2">
@@ -183,7 +190,7 @@ export default function Postbox() {
           {/* SUMBIT BUTTON */}
 
           <button
-            className=" shadow-light w-full cursor-pointer rounded-full bg-blue-400 text-center text-lg text-white"
+            className="shadow-light w-full cursor-pointer rounded-full bg-blue-400 text-center text-lg text-white"
             type="submit"
           >
             Create Post

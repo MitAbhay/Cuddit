@@ -133,6 +133,19 @@ type Query {
       """
       configuration: "postgresql_config"
     )
+  getPostListByTopic(topic: String!): [Post]
+    @dbquery(
+      type: "postgresql"
+      schema: "public"
+      table: "post"
+      query: """
+      select * from "post".id as id from  "post"
+      join "subcuddit" on "subcuddit"."id"	 = "post"."subcuddit_id"
+      where "subcuddit"."topic" = $1
+      order by "post"."created_at" desc
+      """
+      configuration: "postgresql_config"
+    )
   getSubcudditListByTopic(topic: String!): [Subcuddit]
     @dbquery(
       type: "postgresql"
