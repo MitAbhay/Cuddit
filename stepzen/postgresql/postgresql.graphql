@@ -125,8 +125,6 @@ type Query {
   getPostList: [Post]
     @dbquery(
       type: "postgresql"
-      schema: "public"
-      table: "post"
       query: """
       select * from "post"
       order by "post"."created_at" desc
@@ -136,11 +134,9 @@ type Query {
   getPostListByTopic(topic: String!): [Post]
     @dbquery(
       type: "postgresql"
-      schema: "public"
-      table: "post"
       query: """
-      select * from "post".id as id from  "post"
-      join "subcuddit" on "subcuddit"."id"	 = "post"."subcuddit_id"
+      select *, "post".id as id from "post"
+      join "subcuddit" on "subcuddit"."id" = "post"."subcuddit_id"
       where "subcuddit"."topic" = $1
       order by "post"."created_at" desc
       """
