@@ -18,7 +18,7 @@ type Props = {
 }
 
 export default function Post({ post }: Props) {
-  console.log(JSON.stringify(post)[0])
+  // console.log({post}.post.id)
   if (!post)
     return (
       <div className="flex w-full items-center justify-center p-32 text-lg">
@@ -38,7 +38,6 @@ export default function Post({ post }: Props) {
           <div className="flex items-center space-x-2">
             <Avatar seed={post.subcuddit[0]?.topic} />
             <p className="items-center space-x-2 text-xs text-gray-400">
-              {/* {console.log(post.post)} */}
               <Link href={`/subcuddit/${post.subcuddit[0]?.topic}`}>
                 <span className="mr-2 font-bold hover:text-blue-500">
                   r/{post.subcuddit[0]?.topic}
