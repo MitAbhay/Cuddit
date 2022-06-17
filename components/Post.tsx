@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import {
   ShareIcon,
   GiftIcon,
@@ -12,12 +12,57 @@ import Avatar from './Avatar'
 import ReactTimeago from 'react-timeago'
 import Link from 'next/link'
 import { Jelly } from '@uiball/loaders'
+import { useSession } from 'next-auth/react'
+import toast from 'react-hot-toast'
+import { useMutation, useQuery } from '@apollo/client'
+import { ADD_VOTE } from '../graphql/mutation'
+import { GET_VOTES_BY_POST_ID } from '../graphql/queries'
 
 type Props = {
   post: Post
 }
 
 export default function Post({ post }: Props) {
+  const [vote, setVote] = useState<boolean>()
+
+  const { data: session } = useSession()
+
+  const { data, loading } = useQuery(GET_VOTES_BY_POST_ID, {
+    variables: {
+      post_id: post?.id,
+    },
+  })
+
+  const [addVote] = useMutation(ADD_VOTE, {
+    refetchQueries: [GET_VOTES_BY_POST_ID, 'getVotesByPostId'],
+  })
+
+  const upvote = async (isUpvote: boolean) => {
+    if (!session) {
+      toast('You need to signIn to vote !!')
+      return
+    }
+
+    if (vote && isUpvote) return
+    if (vote == false && !isUpvote) return
+
+    await addVote({
+      variables: {
+        post_id: post?.id,
+        username: session?.user?.name,
+        upvote: isUpvote,
+      },
+    })
+  }
+  useEffect(() => {
+    const votes: [Vote] = data?.getVotesByPostId
+
+    const vote = votes?.find((vote) => {
+      vote.username == session?.user?.name
+    })?.upvote
+
+    setVote(vote)
+  }, [data])
   // console.log(post)
   if (!post)
     return (
@@ -29,9 +74,15 @@ export default function Post({ post }: Props) {
     <Link href={`/post/${post.id}`}>
       <div className="flex cursor-pointer rounded-md border border-gray-300 bg-white shadow-sm hover:border hover:border-gray-500">
         <div className="flex flex-col items-center justify-start space-y-4 p-4">
-          <ArrowUpIcon className="h-6 w-6 rounded-md p-1 hover:bg-gray-300 hover:text-blue-500" />
+          <ArrowUpIcon
+            onClick={() => upvote(true)}
+            className="h-6 w-6 rounded-md p-1 hover:bg-gray-300 hover:text-blue-500"
+          />
           <p className="font-bold">0</p>
-          <ArrowDownIcon className="h-6 w-6 rounded-md p-1 hover:bg-gray-300 hover:text-red-500" />
+          <ArrowDownIcon
+            onClick={() => upvote(false)}
+            className="h-6 w-6 rounded-md p-1 hover:bg-gray-300 hover:text-red-500"
+          />
         </div>
         <div>
           {/* Header */}

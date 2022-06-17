@@ -4,6 +4,7 @@ import { useRouter } from 'next/router'
 import React from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
+import ReactTimeago from 'react-timeago'
 import Avatar from '../../components/Avatar'
 import Post from '../../components/Post'
 import { ADD_COMMENT } from '../../graphql/mutation'
@@ -14,7 +15,7 @@ type Inputs = {
 }
 
 function post() {
-  const { addComment } = useMutation(ADD_COMMENT, {
+  const [addComment] = useMutation(ADD_COMMENT, {
     refetchQueries: [GET_POSTS_BY_POST_ID, 'getPostByPostID'],
   })
   const { data: session } = useSession()
@@ -63,7 +64,10 @@ function post() {
                 Comment as{' '}
                 <span className="my-1 font-bold">{post?.username}</span>
               </p>
-              <form className="my-2 flex flex-col space-y-2">
+              <form
+                onSubmit={handleSubmit(onSubmit)}
+                className="my-2 flex flex-col space-y-2"
+              >
                 <textarea
                   {...register('comment')}
                   disabled={!session}
@@ -75,7 +79,7 @@ function post() {
                   }
                 ></textarea>
                 <button
-                  onSubmit={handleSubmit(onSubmit)}
+                  type="submit"
                   className="rounded-md bg-red-500 text-white"
                 >
                   <span className="text-lg">Comment</span>
@@ -84,16 +88,27 @@ function post() {
             </div>
             {console.log(post.comments)}
 
-            <div className="">
+            <div className="-mt-1 space-y-3 rounded-b-md border border-t-0 border-gray-200 bg-white p-2 pl-16 text-sm">
+              <hr className="p-2" />
               {post?.comments?.map((comment) => {
-                ;<div key={comment.id} className="flex space-x-3">
-                  <div className="-mt-1 rounded-b-md border border-t-0 border-gray-200 bg-white p-2 pl-16 text-sm">
-                    <Avatar seed={comment.username} />
+                return (
+                  <div
+                    key={comment.id}
+                    className="relative flex items-center space-x-3"
+                  >
+                    <hr className="absolute top-10 left-8 z-0 h-6 border" />
+                    <div className="z-50">
+                      <Avatar seed={comment.username} />
+                    </div>
+                    <div className="flex flex-col text-sm">
+                      <div className="flex items-center space-x-2 text-xs text-gray-500">
+                        <span className="pr-2">{session?.user?.name}</span>
+                        •<ReactTimeago date={comment.created_at} />
+                      </div>
+                      <p>{comment?.text}</p>
+                    </div>
                   </div>
-                  <div>
-                    <p>{comment?.text}</p>
-                  </div>
-                </div>
+                )
               })}
             </div>
           </>
