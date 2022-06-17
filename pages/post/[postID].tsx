@@ -4,6 +4,7 @@ import { useRouter } from 'next/router'
 import React from 'react'
 import { SubmitHandler, useForm } from 'react-hook-form'
 import toast from 'react-hot-toast'
+import Avatar from '../../components/Avatar'
 import Post from '../../components/Post'
 import { ADD_COMMENT } from '../../graphql/mutation'
 import { GET_POSTS_BY_POST_ID } from '../../graphql/queries'
@@ -26,7 +27,6 @@ function post() {
   })
   //   console.log(data)
   const post: Post[] = data?.getPostByPostID
-  // console.log(post)
 
   const {
     setValue,
@@ -81,6 +81,20 @@ function post() {
                   <span className="text-lg">Comment</span>
                 </button>
               </form>
+            </div>
+            {console.log(post.comments)}
+
+            <div className="">
+              {post?.comments?.map((comment) => {
+                ;<div key={comment.id} className="flex space-x-3">
+                  <div className="-mt-1 rounded-b-md border border-t-0 border-gray-200 bg-white p-2 pl-16 text-sm">
+                    <Avatar seed={comment.username} />
+                  </div>
+                  <div>
+                    <p>{comment?.text}</p>
+                  </div>
+                </div>
+              })}
             </div>
           </>
         )
