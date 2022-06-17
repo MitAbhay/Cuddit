@@ -18,7 +18,7 @@ type Props = {
 }
 
 export default function Post({ post }: Props) {
-  // console.log({post}.post.id)
+  // console.log(post)
   if (!post)
     return (
       <div className="flex w-full items-center justify-center p-32 text-lg">

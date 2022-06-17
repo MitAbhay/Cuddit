@@ -11,12 +11,14 @@ function post() {
       post_id: router.query.postID,
     },
   })
-//   console.log(data)
-  const post: Post = data?.getPostByPostID
-//   console.log({post})
+  //   console.log(data)
+  const post: Post[] = data?.getPostByPostID
+  // console.log(post)
   return (
     <div>
-      <Post post={post} />
+      {post?.map((post) => {
+        return <Post post={post} />
+      })}
     </div>
   )
 }

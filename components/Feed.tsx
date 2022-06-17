@@ -13,12 +13,19 @@ function Feed({ subcuddit }: Props) {
           topic: subcuddit,
         },
       })
-      console.log(subcuddit)
+  // console.log(subcuddit)
   const posts: Post[] = subcuddit ? data?.getPostListByTopic : data?.getPostList
+  // console.log(posts)
+
   return (
     <div>
       {posts?.map((post) => {
-        return <Post key={post.id} post={post} />
+        return (
+          <>
+            {console.log(post)}
+            <Post key={post.id} post={post} />
+          </>
+        )
       })}
     </div>
   )
