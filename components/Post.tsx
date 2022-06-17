@@ -27,7 +27,7 @@ export default function Post({ post }: Props) {
     )
   return (
     <Link href={`/post/${post.id}`}>
-      <div className="my-8 flex cursor-pointer rounded-md border border-gray-300 bg-white p-2 shadow-sm hover:border hover:border-gray-500">
+      <div className="flex cursor-pointer rounded-md border border-gray-300 bg-white shadow-sm hover:border hover:border-gray-500">
         <div className="flex flex-col items-center justify-start space-y-4 p-4">
           <ArrowUpIcon className="h-6 w-6 rounded-md p-1 hover:bg-gray-300 hover:text-blue-500" />
           <p className="font-bold">0</p>

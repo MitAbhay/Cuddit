@@ -18,14 +18,9 @@ function Feed({ subcuddit }: Props) {
   // console.log(posts)
 
   return (
-    <div>
+    <div className="space-y-8 mt-8">
       {posts?.map((post) => {
-        return (
-          <>
-            {console.log(post)}
-            <Post key={post.id} post={post} />
-          </>
-        )
+        return <Post key={post.id} post={post} />
       })}
     </div>
   )

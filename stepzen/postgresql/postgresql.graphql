@@ -179,6 +179,13 @@ type Mutation {
   """
   In this mutation example you can see how to do a mutation to insert data in the database.
   """
+  insertComment(post_id: ID!, text: string!, username: string!): Comment
+    @dbquery(
+      type: "postgresql"
+      table: "subcuddit"
+      dml: INSERT
+      configuration: "postgresql_config"
+    )
   insertSubCuddit(topic: String!): Subcuddit
     @dbquery(
       type: "postgresql"
