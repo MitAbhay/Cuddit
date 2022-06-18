@@ -37,23 +37,6 @@ export default function Post({ post }: Props) {
     refetchQueries: [GET_VOTES_BY_POST_ID, 'getVotesByPostId'],
   })
 
-  const upvote = async (isUpvote: boolean) => {
-    if (!session) {
-      toast('You need to signIn to vote !!')
-      return
-    }
-
-    if (vote && isUpvote) return
-    if (vote == false && !isUpvote) return
-
-    await addVote({
-      variables: {
-        post_id: post?.id,
-        username: session?.user?.name,
-        upvote: isUpvote,
-      },
-    })
-  }
   useEffect(() => {
     const votes: [Vote] = data?.getVotesByPostId
 
@@ -63,6 +46,40 @@ export default function Post({ post }: Props) {
 
     setVote(vote)
   }, [data])
+
+  const upvote = async (isUpvote: boolean) => {
+    if (!session) {
+      toast('You need to signIn to vote !!')
+      return
+    }
+
+    if (vote && isUpvote) return
+    if (vote == false && !isUpvote) return
+
+    const {
+      data: { insertVote: newVote },
+    } = await addVote({
+      variables: {
+        post_id: post?.id,
+        username: session?.user?.name,
+        upvote: isUpvote,
+      },
+    })
+  }
+
+  const displayVote = (data: any) => {
+    const votes: Vote[] = data?.getVotesByPostId
+    const displayNumber = votes?.reduce(
+      (total, vote) => (vote.upvote ? (total += 1) : (total -= 1)),
+      0
+    )
+    if (votes?.length == 0) return 0
+    if (displayNumber == 0) {
+      return votes[0]?.upvote ? 1 : -1
+    }
+
+    return displayNumber
+  }
   // console.log(post)
   if (!post)
     return (
@@ -76,12 +93,16 @@ export default function Post({ post }: Props) {
         <div className="flex flex-col items-center justify-start space-y-4 p-4">
           <ArrowUpIcon
             onClick={() => upvote(true)}
-            className="h-6 w-6 rounded-md p-1 hover:bg-gray-300 hover:text-blue-500"
+            className={`h-6 w-6 rounded-md p-1 hover:bg-gray-300 hover:text-blue-500 ${
+              vote && 'text-blue-500'
+            }`}
           />
-          <p className="font-bold">0</p>
+          <p className="font-bold">{displayVote(data)}</p>
           <ArrowDownIcon
             onClick={() => upvote(false)}
-            className="h-6 w-6 rounded-md p-1 hover:bg-gray-300 hover:text-red-500"
+            className={`h-6 w-6 rounded-md p-1 hover:bg-gray-300 hover:text-red-500 ${
+              vote == false && 'text-red-500'
+            }`}
           />
         </div>
         <div>
