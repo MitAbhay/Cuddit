@@ -11,6 +11,15 @@ export const GET_VOTES_BY_POST_ID = gql`
     }
   }
 `
+export const GET_SUBCUDDIT_WITH_LIMITS = gql`
+  query MyQuery($limit: Int!) {
+    getSubcudditWithLimit(limit: $limit) {
+      id
+      created_at
+      topic
+    }
+  }
+`
 
 export const GET_SUBCUDDIT_BY_TOPIC = gql`
   query MyQuery($topic: String!) {

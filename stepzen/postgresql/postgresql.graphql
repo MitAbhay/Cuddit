@@ -46,6 +46,16 @@ type Vote {
 }
 
 type Query {
+  getSubcudditWithLimit(limit: Int): [Subcuddit]
+    @dbquery(
+      type: "postgresql"
+      query: """
+      select * from "subcuddit"
+      order by "created_at" desc
+      limit $1
+      """
+      configuration: "postgresql_config"
+    )
   getCommentList: [Comment]
     @dbquery(
       type: "postgresql"
