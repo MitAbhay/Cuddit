@@ -14,11 +14,12 @@ const Home: NextPage = () => {
   })
 
   const subcuddits: Subcuddit[] = data?.getSubcudditWithLimit
-  console.log(subcuddits)
+  // console.log(subcuddits)
   return (
     <div className="my-5 mx-auto max-w-5xl">
       <Head>
         <title>Cuddit</title>
+        <link rel="icon" href="/icon.png" />
       </Head>
       <Postbox />
       <div className="flex">

@@ -22,24 +22,25 @@ import Link from 'next/link'
 function Header() {
   const { data: session } = useSession()
   return (
-    <div className="sticky top-0 z-50 flex bg-white px-4 py-2 shadow-lg items-center">
+    <div className="sticky top-0 z-50 flex items-center bg-white px-4 py-2 shadow-lg">
       {/* Logo */}
-      <div className="relative h-10 w-20 flex-shrink-0 cursor-pointer">
+      <div className="relative h-12 w-28 flex-shrink-0 cursor-pointer">
         <Link href="/">
-        <Image layout="fill" src="/logo.png" /></Link>
+          <Image layout="fill" src="/cuddit.png" />
+        </Link>
       </div>
       {/* HomeIcon */}
-      <div className="mx-8 flex items-center xl:min-w-[300px] cursor-pointer">
+      <div className="mx-8 flex cursor-pointer items-center xl:min-w-[300px]">
         <HomeIcon className="h-5 w-5" />
         <p className="ml-2 hidden flex-1 lg:inline">Home</p>
-        <ChevronDownIcon className="h-5 w-5" />
+        {/* <ChevronDownIcon className="h-5 w-5" /> */}
       </div>
       {/* Search */}
       <form className="flex flex-1 items-center space-x-2 rounded-lg border border-gray-200 bg-gray-100 px-2 py-2">
         <SearchIcon className="h-5 w-5 text-gray-400" />
         <input
           className="flex-1 bg-transparent outline-none"
-          placeholder="Search Reddit"
+          placeholder="Search Cuddit"
           type="text"
         />
         <button hidden type="submit" />
@@ -59,15 +60,18 @@ function Header() {
       </div>
       {/* signIn/SignOut */}
       {session ? (
-        <div
-          // onClick={() => signOut()}
-          className="hidden cursor-pointer items-center rounded-lg border border-gray-500 p-1 lg:flex space-x-1"
-        >
+        <div className="hidden items-center space-x-2 rounded-lg border border-gray-500 p-1 lg:flex">
           <div className="flex-1 text-xs text-gray-500">
             <p className="font-bold">{session?.user?.name}</p>
             <p>1 cud</p>
           </div>
-          <ChevronDownIcon className="h-5 w-5 flex-shrink-0 text-gray-500" />
+          <span>||</span>
+          <div
+            onClick={() => signOut()}
+            className=" text-md cursor-pointer items-center rounded-lg p-1 font-bold hover:bg-blue-400 "
+          >
+            SignOut
+          </div>
         </div>
       ) : (
         <div
