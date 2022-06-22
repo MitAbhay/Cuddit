@@ -112,7 +112,7 @@ export default function Post({ post }: Props) {
             <p className="items-center space-x-2 text-xs text-gray-400">
               <Link href={`/subcuddit/${post.subcuddit[0]?.topic}`}>
                 <span className="mr-2 font-bold hover:text-blue-500">
-                  r/{post.subcuddit[0]?.topic}
+                  c/{post.subcuddit[0]?.topic}
                 </span>
               </Link>
               • Posted by u/

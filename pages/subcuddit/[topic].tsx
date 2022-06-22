@@ -18,9 +18,9 @@ function SubCuddit() {
             </div>
             <div>
               <h1 className="text-2xl font-bold">
-                Welcome to r/{topic} Subcuddit
+                Welcome to c/{topic} Subcuddit
               </h1>
-              <p className="text-gray-500">r/{topic}</p>
+              <p className="text-gray-500">c/{topic}</p>
             </div>
           </div>
         </div>

@@ -14,7 +14,7 @@ function SubcudditRow({ index, topic }: Props) {
         <p>{index + 1}</p>
         <ChevronUpIcon className="h-4 w-4 flex-shrink-0 text-green-400" />
         <Avatar seed={`/subcuddit/${topic}`} />
-        <p className="ml-2">r/{topic}</p>
+        <p className="ml-2">c/{topic}</p>
       </div>
       <Link href={`/subcuddit/${topic}`}>
         <div className="cursor-pointer rounded-lg bg-blue-500 px-1 text-white ">

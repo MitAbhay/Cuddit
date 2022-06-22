@@ -125,7 +125,7 @@ export default function Postbox({ subcuddit }: Props) {
           placeholder={
             session
               ? subcuddit
-                ? `Create your Post with Subcuddit r/${subcuddit}`
+                ? `Create your Post with Subcuddit c/${subcuddit}`
                 : 'Type your TITLE here for the Post'
               : 'Sign in to Reddit to Post'
           }
