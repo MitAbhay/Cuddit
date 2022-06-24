@@ -79,6 +79,7 @@ function post() {
                   }
                 ></textarea>
                 <button
+                  disabled={!session}
                   type="submit"
                   className="rounded-md bg-red-500 text-white"
                 >
@@ -86,7 +87,7 @@ function post() {
                 </button>
               </form>
             </div>
-            {console.log(post.comments)}
+            {/* {console.log(post.comments)} */}
 
             <div className="-mt-1 space-y-3 rounded-b-md border border-t-0 border-gray-200 bg-white p-2 pl-16 text-sm">
               <hr className="p-2" />

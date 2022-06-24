@@ -80,7 +80,7 @@ export default function Post({ post }: Props) {
 
     return displayNumber
   }
-  // console.log(post)
+  console.log(displayVote(data))
   if (!post)
     return (
       <div className="flex w-full items-center justify-center p-32 text-lg">
@@ -125,7 +125,9 @@ export default function Post({ post }: Props) {
             <p className="text-lg font-bold">{post.title}</p>
             <p className="">{post.body}</p>
           </div>
-          <img className="w-full" src={post.image} alt="post_image" />
+          {post.image && (
+            <img className="w-full" src={post.image} alt="post_image" />
+          )}
 
           {/* Post Footer */}
           <div className="flex items-center space-x-4 py-4 text-gray-400">
