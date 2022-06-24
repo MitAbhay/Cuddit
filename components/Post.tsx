@@ -27,7 +27,7 @@ export default function Post({ post }: Props) {
 
   const { data: session } = useSession()
 
-  const { data, loading } = useQuery(GET_VOTES_BY_POST_ID, {
+  const { loading, error, data } = useQuery(GET_VOTES_BY_POST_ID, {
     variables: {
       post_id: post?.id,
     },
@@ -36,13 +36,15 @@ export default function Post({ post }: Props) {
   const [addVote] = useMutation(ADD_VOTE, {
     refetchQueries: [GET_VOTES_BY_POST_ID, 'getVotesByPostId'],
   })
-
   useEffect(() => {
     const votes: [Vote] = data?.getVotesByPostId
-
-    const vote = votes?.find((vote) => {
-      vote.username == session?.user?.name
+    // console.log(votes)
+    const vote = votes?.find((v) => {
+      v.username == session?.user?.name
     })?.upvote
+    // console.log(votes)
+    // console.log(vote)
+
 
     setVote(vote)
   }, [data])
@@ -55,7 +57,7 @@ export default function Post({ post }: Props) {
 
     if (vote && isUpvote) return
     if (vote == false && !isUpvote) return
-
+// console.log(vote)
     const {
       data: { insertVote: newVote },
     } = await addVote({
@@ -80,7 +82,8 @@ export default function Post({ post }: Props) {
 
     return displayNumber
   }
-  console.log(displayVote(data))
+  // console.log(displayVote(data))
+
   if (!post)
     return (
       <div className="flex w-full items-center justify-center p-32 text-lg">

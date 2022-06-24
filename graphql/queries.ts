@@ -6,7 +6,7 @@ export const GET_VOTES_BY_POST_ID = gql`
       id
       created_at
       post_id
-      vote
+      upvote
       username
     }
   }

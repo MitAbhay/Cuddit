@@ -40,7 +40,7 @@ type Subcuddit {
 type Vote {
   created_at: DateTime
   id: ID!
-  post_id: ID
+  post_id: ID!
   upvote: Boolean
   username: String
 }
